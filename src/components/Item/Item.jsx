@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
-import classnames from 'classnames'
-import { useDispatch } from "react-redux";
-import { completeTodo, deleteTodo } from '../../redux/actions';
+import classnames from 'classnames';
+import { useFirebase } from 'react-redux-firebase';
 import Edit from '../Edit';
 import { formatTime } from '../../helpers';
 import styles from './Item.module.scss';
 
 const Item = ({ item, item: { id, name, completed, priority, time } }) => {
-  const dispatch = useDispatch();
+  const firebase = useFirebase();
 
   const [idToEdit, setIdToEdit] = useState(null);
   
   const handleComplete = () => {
-    dispatch(completeTodo(id));
+    firebase.update(`todos/${id}`, { completed: true });
   };
 
   const handleEditFinish = () => {
@@ -24,7 +23,7 @@ const Item = ({ item, item: { id, name, completed, priority, time } }) => {
   };
 
   const handleDelete = () => {
-    dispatch(deleteTodo(id));
+    return firebase.remove(`todos/${id}`);
   };
 
   const { timeType, timeString } = formatTime(time);

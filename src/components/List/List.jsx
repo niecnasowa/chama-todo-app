@@ -1,17 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from "react-redux";
+import { useFirebaseConnect } from 'react-redux-firebase';
 import { formatTime } from '../../helpers';
 import Item from '../Item';
 
-
 const List = () => {
-  const todos = useSelector(state => state.todos);
+  useFirebaseConnect(['todos']);
+  const todosData = useSelector((state) => state.firebase.ordered.todos);
 
   // 'Hack' for refreshing list every minute
   const [fakeCurrentDate, setFakeCurrentDate] = useState(new Date());
   useEffect(() => {
-    setTimeout(() => setFakeCurrentDate(new Date()), 60000);
+    const timer = setTimeout(() => setFakeCurrentDate(new Date()), 60000);
+
+    return () => { clearTimeout(timer); };
   }, [fakeCurrentDate]);
+
+  if(!todosData) {
+    return null;
+  }
+
+  const todos = todosData.map(({ key, value }) => ({ id: key, ...value}));
 
   todos.sort((a, b) => (b.priority - a.priority));
 

@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import moment from 'moment'
+import moment from 'moment';
 import DatePicker from 'react-datepicker';
-import { useDispatch } from "react-redux";
-import { addTodo, editTodo } from '../../redux/actions';
-import validation from './validation'
+import { useFirebase } from 'react-redux-firebase';
+import validation from './validation';
 import styles from './Form.module.scss';
 
 import "react-datepicker/dist/react-datepicker.css";
 
 const Form = ({ item, onFinish }) => {
-  const dispatch = useDispatch();
+  const firebase = useFirebase();
 
   const [name, setName] = useState(item ? item.name : '');
   const [priority, setPriority] = useState(item ? item.priority : 1);
@@ -26,30 +25,35 @@ const Form = ({ item, onFinish }) => {
   };
 
   const handleTimeChange = (time) => {
-    setTime(time)
+    setTime(time);
   };
 
   const handleSendForm = (e) => {
     e.preventDefault();
 
-    const newItem = { name, priority, time };
+    const newItem = {
+      name,
+      priority,
+      time: moment(time).format(),
+      completed: false,
+    };
 
     const error = validation(newItem);
     setError(error);
 
     if(!error) {
       if(item) {
-        dispatch(editTodo({ ...item, ...newItem }));
+        firebase.update(`todos/${item.id}`, newItem);
       }
 
       if(!item) {
-        dispatch(addTodo(newItem));
+        firebase.push('todos', newItem)
         setName('');
         setPriority(1);
       }
 
       if(onFinish) {
-        onFinish()
+        onFinish();
       }
     }
   };
@@ -90,7 +94,7 @@ const Form = ({ item, onFinish }) => {
 
 
         <div className={styles.row}>
-          {/* Weird name, becuase I don't want fighting with browser autocomplete */}
+          {/* Weird name, because I don't want fighting with browser autocomplete */}
           <label htmlFor="time-for-todo">Time:</label><br />
           <DatePicker
             id="time-for-todo"

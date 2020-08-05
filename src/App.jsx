@@ -1,15 +1,27 @@
 import React from 'react';
-import { Form, List, Logo } from './components';
+import { useSelector } from "react-redux";
+import { Form, List, Logo, Login } from './components';
 import styles from './App.module.scss';
 
-const App = () => (
-  <div className={styles.body}>
-    <div className={styles.container}>
-      <Logo />
-      <Form />
-      <List />
-    </div>
-  </div>
-);
+
+const App = () => {
+  const auth = useSelector((state) => state.firebase.auth);
+  const authenticated = !auth.isEmpty;
+
+  return (
+    <>
+      <Login authenticated={authenticated} />
+      {authenticated && (
+        <div className={styles.body}>
+          <div className={styles.container}>
+            <Logo />
+            <Form />
+            <List />
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
 
 export default App;

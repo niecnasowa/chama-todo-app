@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment';
 
 const validation = ({ name, priority, time }) => {
   if(Number.isNaN(priority)) {
@@ -27,8 +27,8 @@ const validation = ({ name, priority, time }) => {
     return 'Date is not valid';
   }
 
-  const oneYearAGO = moment().subtract(1, 'year')
-  const oneYearFromNow = moment().add(1, 'year')
+  const oneYearAGO = moment().subtract(1, 'year');
+  const oneYearFromNow = moment().add(1, 'year');
   if(momentTime.isBefore(oneYearAGO) || momentTime.isAfter(oneYearFromNow)) {
     return 'Please select time from 1 year ago to 1 year from now';
   }

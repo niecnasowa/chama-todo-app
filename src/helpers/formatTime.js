@@ -15,7 +15,7 @@ const formatTime = (time) => {
   const dueTimeVeryClose = momentTime.isBefore(TodayMidnight);
 
   if(dueTimeVeryClose) {
-    return { timeType: 'veryClose', timeString: momentTime.format('hh:mm') };
+    return { timeType: 'veryClose', timeString: momentTime.format('HH:mm') };
   }
 
   //  dueTimeClose - Due time 3 days

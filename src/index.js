@@ -1,20 +1,39 @@
 import React from 'react';
+import firebase from 'firebase';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux'
-import { PersistGate } from 'redux-persist/integration/react'
+import { Provider } from 'react-redux';
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import configureStore from './redux/configureStore'
+import configureStore from './redux/configureStore';
 import './index.css';
 
-const { store, persistor } = configureStore();
+export const config = {
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
+};
+
+firebase.initializeApp(config);
+
+const rrfConfig = {
+  userProfile: 'users'
+};
+
+const { store } = configureStore();
+
+const rrfProps = {
+  firebase,
+  config: rrfConfig,
+  dispatch: store.dispatch
+};
 
 ReactDOM.render(
   (<React.StrictMode>
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
+      <ReactReduxFirebaseProvider {...rrfProps}>
         <App />
-      </PersistGate>
+      </ReactReduxFirebaseProvider>
     </Provider>
   </React.StrictMode>),
   document.getElementById('root')
