@@ -5,7 +5,7 @@ import styles from './App.module.scss';
 
 
 const App = () => {
-  const auth = useSelector((state) => state.firebase.auth);
+  const auth = useSelector(({ firebase }) => firebase.auth);
   const authenticated = !auth.isEmpty;
 
   return (

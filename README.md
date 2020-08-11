@@ -21,7 +21,6 @@ Instructions for this assignment: [https://github.com/chamatheapp/chama-frontend
 #### 3. `npm start`
 
 ### Notes
-#### Notification sounds, I didn't had enough time so they are made in poor way. They can double sometimes.
 #### Four categories of To-Do with different colors: before (before now), veryClose (today), close (3 days), normal (more than 3 days)
 #### I created one example test with jest in: src/components/Item/Item.test.js, to run tests 'npm run test'
 #### Also created example of acceptance test with cypress, you can check it in /cypress folder, to run tests:
